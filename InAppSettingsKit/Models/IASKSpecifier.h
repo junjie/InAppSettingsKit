@@ -50,6 +50,8 @@
 - (NSString*)footerText;
 - (Class)viewControllerClass;
 - (SEL)viewControllerSelector;
+- (Class)viewControllerCreatorClass;
+- (SEL)viewControllerCreatorSelector;
 - (NSString*)viewControllerStoryBoardFile;
 - (NSString*)viewControllerStoryBoardID;
 - (Class)buttonClass;

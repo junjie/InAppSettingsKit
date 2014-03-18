@@ -80,6 +80,14 @@
     return NSSelectorFromString([_specifierDict objectForKey:kIASKViewControllerSelector]);
 }
 
+- (Class)viewControllerCreatorClass {
+    return NSClassFromString([_specifierDict objectForKey:kIASKViewControllerCreatorClass]);
+}
+
+- (SEL)viewControllerCreatorSelector {
+    return NSSelectorFromString([_specifierDict objectForKey:kIASKViewControllerCreatorSelector]);
+}
+
 - (NSString*)viewControllerStoryBoardFile {
 	return [_specifierDict objectForKey:kIASKViewControllerStoryBoardFile];
 }

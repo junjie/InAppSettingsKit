@@ -656,6 +656,24 @@ CGRect IASKCGRectSwap(CGRect rect);
             [self.navigationController pushViewController:vc animated:YES];
             return;
         }
+		
+		Class vcCreatorClass = [specifier viewControllerCreatorClass];
+		if (vcCreatorClass) {
+			SEL creatorSelector = [specifier viewControllerCreatorSelector];
+			
+			if (creatorSelector)
+			{
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+				UIViewController *vc =
+				[vcCreatorClass performSelector:creatorSelector
+									 withObject:[specifier file]
+									 withObject:specifier];
+#pragma clang diagnostic pop
+				[self.navigationController pushViewController:vc animated:YES];
+				return;
+			}
+		}
         
         if (nil == [specifier file]) {
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
