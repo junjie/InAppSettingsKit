@@ -139,6 +139,10 @@ CGRect IASKCGRectSwap(CGRect rect);
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(singleTapToEndEdit:)];   
     tapGesture.cancelsTouchesInView = NO;
     [self.tableView addGestureRecognizer:tapGesture];
+	
+	// Edge-swipe back doesn't seem to deselect the cell properly. We do this
+	// manually instead.
+	self.clearsSelectionOnViewWillAppear = NO;
 }
 
 - (void)viewDidUnload {
@@ -149,14 +153,16 @@ CGRect IASKCGRectSwap(CGRect rect);
 	self.view = nil;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-	// if there's something selected, the value might have changed
-	// so reload that row
+- (void)viewWillAppear:(BOOL)animated
+{
 	NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
-	if(selectedIndexPath) {
-		[self.tableView reloadRowsAtIndexPaths:[NSArray arrayWithObject:selectedIndexPath] 
+	if (selectedIndexPath)
+	{
+		// Reload the row for any changes to the value to the cell
+		[self.tableView reloadRowsAtIndexPaths:@[selectedIndexPath]
 							  withRowAnimation:UITableViewRowAnimationNone];
-		// and reselect it, so we get the nice default deselect animation from UITableViewController
+
+		// Reselect back the cell so we can deselect it after the view has appeared
 		[self.tableView selectRowAtIndexPath:selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
 	}
 	
@@ -177,7 +183,16 @@ CGRect IASKCGRectSwap(CGRect rect);
 												   object:[NSUserDefaults standardUserDefaults]];
 		[self userDefaultsDidChange]; // force update in case of changes while we were hidden
 	}
+	
+	// If clearsSelectionOnViewWillAppear is YES, then super will clear the
+	// selection. But since it's NO, we'll clear it ourselves after this
 	[super viewWillAppear:animated];
+	
+	// Deselect the path manually
+	if (selectedIndexPath)
+	{
+		[self.tableView deselectRowAtIndexPath:selectedIndexPath animated:animated];
+	}
 }
 
 - (CGSize)contentSizeForViewInPopover {
@@ -186,7 +201,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-
+	
 	NSNotificationCenter *dc = [NSNotificationCenter defaultCenter];
 	[dc addObserver:self selector:@selector(synchronizeSettings) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
 	[dc addObserver:self selector:@selector(reload) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
