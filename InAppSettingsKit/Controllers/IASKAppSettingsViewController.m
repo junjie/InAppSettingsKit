@@ -157,16 +157,9 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (void)viewWillAppear:(BOOL)animated
 {
-	NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
-	if (selectedIndexPath)
-	{
-		// Reload the row for any changes to the value to the cell
-		[self.tableView reloadRowsAtIndexPaths:@[selectedIndexPath]
-							  withRowAnimation:UITableViewRowAnimationNone];
-
-		// Reselect back the cell so we can deselect it after the view has appeared
-		[self.tableView selectRowAtIndexPath:selectedIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-	}
+	// If clearsSelectionOnViewWillAppear is YES, then super will clear the
+	// selection. But we've set that to NO, so selection will retain.
+	[super viewWillAppear:animated];
 	
 	if (_showDoneButton) {
 		UIBarButtonItem *buttonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone 
@@ -183,17 +176,11 @@ CGRect IASKCGRectSwap(CGRect rect);
 												 selector:@selector(userDefaultsDidChange)
 													 name:NSUserDefaultsDidChangeNotification
 												   object:[NSUserDefaults standardUserDefaults]];
-		[self userDefaultsDidChange]; // force update in case of changes while we were hidden
-	}
-	
-	// If clearsSelectionOnViewWillAppear is YES, then super will clear the
-	// selection. But since it's NO, we'll clear it ourselves after this
-	[super viewWillAppear:animated];
-	
-	// Deselect the path manually
-	if (selectedIndexPath)
-	{
-		[self.tableView deselectRowAtIndexPath:selectedIndexPath animated:animated];
+		
+		// Don't call this on viewWillAppear; this will interfere with
+		// our custom deselection animation on viewWillAppear:. In any case
+		// we do a reload each time we come back on the cell
+//		[self userDefaultsDidChange]; // force update in case of changes while we were hidden
 	}
 }
 
@@ -208,6 +195,17 @@ CGRect IASKCGRectSwap(CGRect rect);
 	[dc addObserver:self selector:@selector(synchronizeSettings) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
 	[dc addObserver:self selector:@selector(reload) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 	[dc addObserver:self selector:@selector(synchronizeSettings) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
+	
+	// Reload and deselect the last selection. In iOS 8 attempting to reload
+	// in viewWillAppear: crashes.
+	NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
+	if (selectedIndexPath)
+	{
+		// Reload the row for any changes to the value to the cell.
+		// This also has the effect of deselecting the cell
+		[self.tableView reloadRowsAtIndexPaths:@[selectedIndexPath]
+							  withRowAnimation:UITableViewRowAnimationFade];
+	}
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
