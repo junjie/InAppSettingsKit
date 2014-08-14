@@ -80,6 +80,10 @@
     return NSSelectorFromString([_specifierDict objectForKey:kIASKViewControllerSelector]);
 }
 
+- (SEL)viewControllerValueSelector {
+	return NSSelectorFromString([_specifierDict objectForKey:kIASKViewControllerValueSelector]);
+}
+
 - (Class)viewControllerCreatorClass {
     return NSClassFromString([_specifierDict objectForKey:kIASKViewControllerCreatorClass]);
 }
@@ -130,6 +134,38 @@
 		return [strongSettingsReader titleForStringId:[titles objectAtIndex:keyIndex]];
 	}
 	@catch (NSException * e) {}
+	return nil;
+}
+
+- (NSString *)stringValueForChildPane {
+	if (![self.type isEqualToString:kIASKPSChildPaneSpecifier]) {
+		return nil;
+	}
+	
+	SEL valueSelector = [self viewControllerValueSelector];
+	if (!valueSelector) {
+		return nil;
+	}
+	
+	Class vcClass = [self viewControllerClass];
+	
+	if (!vcClass) {
+		vcClass = [self viewControllerCreatorClass];
+	}
+	
+	if (!vcClass) {
+		return nil;
+	}
+	
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+	NSString *value = [vcClass performSelector:valueSelector];
+#pragma clang diagnostic pop
+	
+	if ([value isKindOfClass:[NSString class]]) {
+		return value;
+	}
+
 	return nil;
 }
 
@@ -285,16 +321,17 @@
 
 - (NSTextAlignment)textAlignment
 {
-    if ([[_specifierDict objectForKey:kIASKTextLabelAlignment] isEqualToString:kIASKTextLabelAlignmentLeft]) {
+	NSString *alignmentString = [_specifierDict objectForKey:kIASKTextLabelAlignment];
+    if ([alignmentString isEqualToString:kIASKTextLabelAlignmentLeft]) {
         return NSTextAlignmentLeft;
-    } else if ([[_specifierDict objectForKey:kIASKTextLabelAlignment] isEqualToString:kIASKTextLabelAlignmentCenter]) {
+    } else if ([alignmentString isEqualToString:kIASKTextLabelAlignmentCenter]) {
         return NSTextAlignmentCenter;
-    } else if ([[_specifierDict objectForKey:kIASKTextLabelAlignment] isEqualToString:kIASKTextLabelAlignmentRight]) {
+    } else if ([alignmentString isEqualToString:kIASKTextLabelAlignmentRight]) {
         return NSTextAlignmentRight;
     }
     if ([self.type isEqualToString:kIASKButtonSpecifier] && !self.cellImage) {
 		return NSTextAlignmentCenter;
-	} else if ([self.type isEqualToString:kIASKPSMultiValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueSpecifier]) {
+	} else if ([self.type isEqualToString:kIASKPSMultiValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueSpecifier] || self.stringValueForChildPane) {
 		return NSTextAlignmentRight;
 	}
 	return NSTextAlignmentLeft;

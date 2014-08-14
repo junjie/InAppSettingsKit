@@ -39,6 +39,7 @@
 #define kIASKShortTitles                      @"ShortTitles"
 #define kIASKViewControllerClass              @"IASKViewControllerClass"
 #define kIASKViewControllerSelector           @"IASKViewControllerSelector"
+#define kIASKViewControllerValueSelector      @"IASKViewControllerValueSelector"
 #define kIASKViewControllerCreatorClass       @"IASKViewControllerCreatorClass"
 #define kIASKViewControllerCreatorSelector    @"IASKViewControllerCreatorSelector"
 #define kIASKViewControllerStoryBoardFile     @"IASKViewControllerStoryBoardFile"

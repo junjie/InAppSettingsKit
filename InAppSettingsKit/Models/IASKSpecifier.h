@@ -30,6 +30,7 @@
 - (NSString*)key;
 - (NSString*)type;
 - (NSString*)titleForCurrentValue:(id)currentValue;
+- (NSString*)stringValueForChildPane;
 - (NSInteger)multipleValuesCount;
 - (NSArray*)multipleValues;
 - (NSArray*)multipleTitles;
@@ -50,6 +51,7 @@
 - (NSString*)footerText;
 - (Class)viewControllerClass;
 - (SEL)viewControllerSelector;
+- (SEL)viewControllerValueSelector;
 - (Class)viewControllerCreatorClass;
 - (SEL)viewControllerCreatorSelector;
 - (NSString*)viewControllerStoryBoardFile;
