@@ -69,6 +69,11 @@
 @property (nonatomic, assign) BOOL showDoneButton;
 @property (nonatomic, retain) NSSet *hiddenKeys;
 
+@property (nonatomic, strong) UIFont *customTitleValueCellTitleFont;
+@property (nonatomic, strong) UIFont *customTitleValueCellValueFont;
+@property (nonatomic, strong) UIFont *customHeaderFont;
+@property (nonatomic, strong) UIFont *customFooterFont;
+
 - (void)synchronizeSettings;
 - (void)dismiss:(id)sender;
 - (void)setHiddenKeys:(NSSet*)hiddenKeys animated:(BOOL)animated;

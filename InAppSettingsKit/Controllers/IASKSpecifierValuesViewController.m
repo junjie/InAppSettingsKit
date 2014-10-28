@@ -18,11 +18,14 @@
 #import "IASKSpecifier.h"
 #import "IASKSettingsReader.h"
 #import "IASKSettingsStoreUserDefaults.h"
+#import "kIASKPSGenericTableViewCell.h"
+#import "IASKTableViewHeaderFooterLabel.h"
 
 #define kCellValue      @"kCellValue"
 
 @interface IASKSpecifierValuesViewController()
 - (void)userDefaultsDidChange;
+@property (nonatomic, strong) IASKTableViewFooterLabel *footerLabel;
 @end
 
 @implementation IASKSpecifierValuesViewController
@@ -136,12 +139,51 @@
     return [_currentSpecifier footerText];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	IASKTableViewFooterLabel *footerView = [self footerViewForTableView:tableView section:section];
+	
+	if (!footerView)
+	{
+		return UITableViewAutomaticDimension;
+	}
+	
+	[footerView fitToWidth:CGRectGetWidth(tableView.frame)];
+	return CGRectGetHeight(footerView.frame);
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	return [self footerViewForTableView:tableView section:section];
+}
+
+- (IASKTableViewFooterLabel *)footerViewForTableView:(UITableView *)tableView section:(NSInteger)section
+{
+	NSString *footerText = [self tableView:tableView titleForFooterInSection:section];
+	
+	if (![footerText length])
+	{
+		return nil;
+	}
+	
+	if (!self.footerLabel)
+	{
+		IASKTableViewFooterLabel *footerLabel = [[IASKTableViewFooterLabel alloc] initWithFrame:CGRectZero];
+		footerLabel.font = self.customFooterFont;
+		footerLabel.text = footerText;
+		
+		self.footerLabel = footerLabel;
+	}
+	
+	return self.footerLabel;
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell   = [tableView dequeueReusableCellWithIdentifier:kCellValue];
     NSArray *titles         = [_currentSpecifier multipleTitles];
 	
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellValue];
+		cell = [[kIASKPSGenericTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kCellValue textLabelFont:self.customTitleValueCellTitleFont valueLabelFont:self.customTitleValueCellValueFont];
     }
 	
 	if ([indexPath isEqual:[self checkedItem]]) {
@@ -191,6 +233,8 @@
 	if(_currentSpecifier) {
 		[self updateCheckedItem];
 	}
+	
+	self.footerLabel = nil;
 	
 	// only reload the table if it had changed; prevents animation cancellation
 	if (![self.checkedItem isEqual:oldCheckedItem]) {

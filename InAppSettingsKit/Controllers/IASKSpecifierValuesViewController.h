@@ -33,4 +33,9 @@
 @property (nonatomic, retain) NSIndexPath *checkedItem;
 @property (nonatomic, retain) IASKSpecifier *currentSpecifier;
 
+@property (nonatomic, strong) UIFont *customTitleValueCellTitleFont;
+@property (nonatomic, strong) UIFont *customTitleValueCellValueFont;
+@property (nonatomic, strong) UIFont *customHeaderFont;
+@property (nonatomic, strong) UIFont *customFooterFont;
+
 @end

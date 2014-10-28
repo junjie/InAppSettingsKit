@@ -18,6 +18,7 @@
 #import "IASKAppSettingsViewController.h"
 #import "IASKSettingsReader.h"
 #import "IASKSettingsStoreUserDefaults.h"
+#import "kIASKPSGenericTableViewCell.h"
 #import "IASKPSSliderSpecifierViewCell.h"
 #import "IASKPSTextFieldSpecifierViewCell.h"
 #import "IASKPSTitleValueSpecifierViewCell.h"
@@ -459,12 +460,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	
 	headerLabel = [[IASKTableViewHeaderLabel alloc] initWithFrame:CGRectZero];
+	headerLabel.font = self.customFooterFont;
 	headerLabel.text = headerText;
-	
-	// Hack: Force UIAppearance settings to set, if any, by adding the view to
-	// ourselves and then removing it.
-	[self.view addSubview:headerLabel];
-	[headerLabel removeFromSuperview];
 	
 	[self.headerFooterCache setObject:headerLabel forKey:cachedKey];
 	
@@ -525,12 +522,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	
 	footerLabel = [[IASKTableViewFooterLabel alloc] initWithFrame:CGRectZero];
+	footerLabel.font = self.customFooterFont;
 	footerLabel.text = footerText;
-	
-	// Hack: Force UIAppearance settings to set, if any, by adding the view to
-	// ourselves and then removing it.
-	[self.view addSubview:footerLabel];
-	[footerLabel removeFromSuperview];
 	
 	[self.headerFooterCache setObject:footerLabel forKey:cachedKey];
 	
@@ -540,13 +533,13 @@ CGRect IASKCGRectSwap(CGRect rect);
 - (UITableViewCell*)newCellForIdentifier:(NSString*)identifier {
 	UITableViewCell *cell = nil;
 	if ([identifier isEqualToString:kIASKPSToggleSwitchSpecifier]) {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kIASKPSToggleSwitchSpecifier];
+		cell = [[kIASKPSGenericTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kIASKPSToggleSwitchSpecifier textLabelFont:self.customTitleValueCellTitleFont valueLabelFont:self.customTitleValueCellValueFont];
 		cell.accessoryView = [[IASKSwitch alloc] initWithFrame:CGRectMake(0, 0, 79, 27)];
 		[((IASKSwitch*)cell.accessoryView) addTarget:self action:@selector(toggledValue:) forControlEvents:UIControlEventValueChanged];
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
 	else if ([identifier isEqualToString:kIASKPSMultiValueSpecifier] || [identifier isEqualToString:kIASKPSTitleValueSpecifier]) {
-		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier textLabelFont:self.customTitleValueCellTitleFont valueLabelFont:self.customTitleValueCellValueFont];
 		cell.accessoryType = [identifier isEqualToString:kIASKPSMultiValueSpecifier] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 	}
 	else if ([identifier isEqualToString:kIASKPSTextFieldSpecifier]) {
@@ -556,13 +549,13 @@ CGRect IASKCGRectSwap(CGRect rect);
 	else if ([identifier isEqualToString:kIASKPSSliderSpecifier]) {
         cell = [[IASKPSSliderSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:kIASKPSSliderSpecifier];
 	} else if ([identifier isEqualToString:kIASKPSChildPaneSpecifier]) {
-		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier textLabelFont:self.customTitleValueCellTitleFont valueLabelFont:self.customTitleValueCellValueFont];
 		cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	} else if ([identifier isEqualToString:kIASKMailComposeSpecifier]) {
-		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier];
+		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier textLabelFont:self.customTitleValueCellTitleFont valueLabelFont:self.customTitleValueCellValueFont];
 		[cell setAccessoryType:UITableViewCellAccessoryDisclosureIndicator];
 	} else {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
+		cell = [[kIASKPSGenericTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:identifier];
 	}
 	IASK_IF_PRE_IOS6(cell.textLabel.minimumFontSize = kIASKMinimumFontSize;
 					 cell.detailTextLabel.minimumFontSize = kIASKMinimumFontSize;);
@@ -718,6 +711,12 @@ CGRect IASKCGRectSwap(CGRect rect);
         targetViewController.settingsReader = self.settingsReader;
         targetViewController.settingsStore = self.settingsStore;
 		targetViewController.view.tintColor = self.view.tintColor;
+		
+		targetViewController.customTitleValueCellTitleFont = self.customTitleValueCellTitleFont;
+		targetViewController.customTitleValueCellValueFont = self.customTitleValueCellValueFont;
+		targetViewController.customHeaderFont = self.customHeaderFont;
+		targetViewController.customFooterFont = self.customFooterFont;
+		
         _currentChildViewController = targetViewController;
         [[self navigationController] pushViewController:targetViewController animated:YES];
         
@@ -793,6 +792,11 @@ CGRect IASKCGRectSwap(CGRect rect);
         targetViewController.title = specifier.title;
 		targetViewController.view.tintColor = self.view.tintColor;
         _currentChildViewController = targetViewController;
+		
+		targetViewController.customTitleValueCellTitleFont = self.customTitleValueCellTitleFont;
+		targetViewController.customTitleValueCellValueFont = self.customTitleValueCellValueFont;
+		targetViewController.customHeaderFont = self.customHeaderFont;
+		targetViewController.customFooterFont = self.customFooterFont;
         
         _reloadDisabled = NO;
         [self.tableView reloadData];
