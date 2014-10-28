@@ -59,4 +59,9 @@
 	return self;
 }
 
+- (void)setLabelFont:(UIFont *)labelFont
+{
+	[super setLabelFont:labelFont];
+}
+
 @end

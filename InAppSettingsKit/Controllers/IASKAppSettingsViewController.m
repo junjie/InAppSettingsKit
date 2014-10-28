@@ -50,6 +50,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 }
 
 @property (nonatomic, strong) id currentFirstResponder;
+@property (nonatomic, strong) NSCache *headerFooterCache;
 
 - (void)_textChanged:(id)sender;
 - (void)synchronizeSettings;
@@ -99,6 +100,16 @@ CGRect IASKCGRectSwap(CGRect rect);
 	isPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
 #endif
 	return isPad;
+}
+
+#pragma mark - Lazy Accessors for Cache
+
+- (NSCache *)headerFooterCache {
+	if (!_headerFooterCache) {
+		_headerFooterCache = [NSCache new];
+	}
+	
+	return _headerFooterCache;
 }
 
 #pragma mark standard view controller methods
@@ -406,7 +417,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		return [self.delegate settingsViewController:self tableView:tableView viewForHeaderForSection:section];
 	}
 
-	return [self titleViewForTableView:tableView section:section];
+	return [self headerViewForTableView:tableView section:section];
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
@@ -418,7 +429,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		
 	}
 
-	IASKTableViewHeaderLabel *titleView = [self titleViewForTableView:tableView section:section];
+	IASKTableViewHeaderLabel *titleView = [self headerViewForTableView:tableView section:section];
 
 	if (!titleView)
 	{
@@ -429,7 +440,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	return CGRectGetHeight(titleView.frame);
 }
 
-- (IASKTableViewHeaderLabel *)titleViewForTableView:(UITableView *)tableView section:(NSInteger)section
+- (IASKTableViewHeaderLabel *)headerViewForTableView:(UITableView *)tableView section:(NSInteger)section
 {
 	NSString *headerText = [self tableView:tableView titleForHeaderInSection:section];
 	
@@ -438,8 +449,24 @@ CGRect IASKCGRectSwap(CGRect rect);
 		return nil;
 	}
 	
-	IASKTableViewHeaderLabel *headerLabel = [[IASKTableViewHeaderLabel alloc] initWithFrame:CGRectZero];
+	NSString *cachedKey = [@"HEADER_" stringByAppendingString:headerText];
+	
+	IASKTableViewHeaderLabel *headerLabel = [self.headerFooterCache objectForKey:cachedKey];
+	
+	if (headerLabel != nil)
+	{
+		return headerLabel;
+	}
+	
+	headerLabel = [[IASKTableViewHeaderLabel alloc] initWithFrame:CGRectZero];
 	headerLabel.text = headerText;
+	
+	// Hack: Force UIAppearance settings to set, if any, by adding the view to
+	// ourselves and then removing it.
+	[self.view addSubview:headerLabel];
+	[headerLabel removeFromSuperview];
+	
+	[self.headerFooterCache setObject:headerLabel forKey:cachedKey];
 	
 	return headerLabel;
 }
@@ -488,8 +515,24 @@ CGRect IASKCGRectSwap(CGRect rect);
 		return nil;
 	}
 	
-	IASKTableViewFooterLabel *footerLabel = [[IASKTableViewFooterLabel alloc] initWithFrame:CGRectZero];
+	NSString *cachedKey = [@"FOOTER_" stringByAppendingString:footerText];
+	
+	IASKTableViewFooterLabel *footerLabel = [self.headerFooterCache objectForKey:cachedKey];
+	
+	if (footerLabel != nil)
+	{
+		return footerLabel;
+	}
+	
+	footerLabel = [[IASKTableViewFooterLabel alloc] initWithFrame:CGRectZero];
 	footerLabel.text = footerText;
+	
+	// Hack: Force UIAppearance settings to set, if any, by adding the view to
+	// ourselves and then removing it.
+	[self.view addSubview:footerLabel];
+	[footerLabel removeFromSuperview];
+	
+	[self.headerFooterCache setObject:footerLabel forKey:cachedKey];
 	
 	return footerLabel;
 }
@@ -940,4 +983,15 @@ CGRect IASKCGRectSwap(CGRect rect) {
 	newRect.size.height = rect.size.width;
 	return newRect;
 }
+
+#pragma mark - 
+
+- (void)clearHeaderFooterCache
+{
+	if (_headerFooterCache)
+	{
+		[self.headerFooterCache removeAllObjects];
+	}
+}
+
 @end

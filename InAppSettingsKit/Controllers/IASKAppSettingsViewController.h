@@ -72,4 +72,8 @@
 - (void)synchronizeSettings;
 - (void)dismiss:(id)sender;
 - (void)setHiddenKeys:(NSSet*)hiddenKeys animated:(BOOL)animated;
+
+/// Call to clear cached header/footer cells in response to appearance changes
+- (void)clearHeaderFooterCache;
+
 @end
