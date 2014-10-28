@@ -21,6 +21,8 @@
 #import "IASKViewController.h"
 #import "IASKSpecifier.h"
 
+#import "IASKTableViewHeaderFooterLabel.h"
+
 @class IASKSettingsReader;
 @class IASKAppSettingsViewController;
 

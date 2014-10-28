@@ -1,0 +1,3 @@
+[submodule "InAppSettingsKit/Submodules/JJInsetLabel"]
+	path = InAppSettingsKit/Submodules/JJInsetLabel
+	url = git@github.com:junjie/JJInsetLabel.git

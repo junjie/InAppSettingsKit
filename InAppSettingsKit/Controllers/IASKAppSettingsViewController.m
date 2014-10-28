@@ -404,9 +404,9 @@ CGRect IASKCGRectSwap(CGRect rect);
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
 	if ([self.delegate respondsToSelector:@selector(settingsViewController:tableView:viewForHeaderForSection:)]) {
 		return [self.delegate settingsViewController:self tableView:tableView viewForHeaderForSection:section];
-	} else {
-		return nil;
 	}
+
+	return [self titleViewForTableView:tableView section:section];
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
@@ -417,25 +417,31 @@ CGRect IASKCGRectSwap(CGRect rect);
 		}
 		
 	}
-	NSString *title = [self tableView:tableView titleForHeaderInSection:section];
-	if ([title length] > 0) {
-		CGSize size = CGSizeZero;
-		IASK_IF_PRE_IOS7
-		(
-		 size = [title sizeWithFont:[UIFont boldSystemFontOfSize:[UIFont labelFontSize]]
-                  constrainedToSize:CGSizeMake(tableView.frame.size.width - 2*kIASKHorizontalPaddingGroupTitles, INFINITY)
-					  lineBreakMode:NSLineBreakByWordWrapping];
-		 );
-		IASK_IF_IOS7_OR_GREATER
-		(
-		 size = [title boundingRectWithSize:CGSizeMake(tableView.frame.size.width - 2*kIASKHorizontalPaddingGroupTitles, INFINITY)
-									options:NSStringDrawingUsesLineFragmentOrigin
-								 attributes:@{NSFontAttributeName: [UIFont boldSystemFontOfSize:[UIFont labelFontSize]]}
-									context:nil].size;
-		);
-		return roundf(size.height+kIASKVerticalPaddingGroupTitles);
+
+	IASKTableViewHeaderLabel *titleView = [self titleViewForTableView:tableView section:section];
+
+	if (!titleView)
+	{
+		return UITableViewAutomaticDimension;
 	}
-	return 0;
+
+	[titleView fitToWidth:CGRectGetWidth(tableView.frame)];
+	return CGRectGetHeight(titleView.frame);
+}
+
+- (IASKTableViewHeaderLabel *)titleViewForTableView:(UITableView *)tableView section:(NSInteger)section
+{
+	NSString *headerText = [self tableView:tableView titleForHeaderInSection:section];
+	
+	if (![headerText length])
+	{
+		return nil;
+	}
+	
+	IASKTableViewHeaderLabel *headerLabel = [[IASKTableViewHeaderLabel alloc] initWithFrame:CGRectZero];
+	headerLabel.text = headerText;
+	
+	return headerLabel;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -455,6 +461,38 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+	IASKTableViewFooterLabel *footerView = [self footerViewForTableView:tableView section:section];
+	
+	if (!footerView)
+	{
+		return UITableViewAutomaticDimension;
+	}
+	
+	[footerView fitToWidth:CGRectGetWidth(tableView.frame)];
+	return CGRectGetHeight(footerView.frame);
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+	return [self footerViewForTableView:tableView section:section];
+}
+
+- (IASKTableViewFooterLabel *)footerViewForTableView:(UITableView *)tableView section:(NSInteger)section
+{
+	NSString *footerText = [self tableView:tableView titleForFooterInSection:section];
+	
+	if (![footerText length])
+	{
+		return nil;
+	}
+	
+	IASKTableViewFooterLabel *footerLabel = [[IASKTableViewFooterLabel alloc] initWithFrame:CGRectZero];
+	footerLabel.text = footerText;
+	
+	return footerLabel;
+}
 
 - (UITableViewCell*)newCellForIdentifier:(NSString*)identifier {
 	UITableViewCell *cell = nil;
