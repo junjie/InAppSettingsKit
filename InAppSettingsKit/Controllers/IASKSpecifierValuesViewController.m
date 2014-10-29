@@ -285,4 +285,21 @@
 	}
 }
 
+#pragma mark - Status Bar Style
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+	return self.statusBarStyle;
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle
+{
+	if (_statusBarStyle != statusBarStyle)
+	{
+		_statusBarStyle = statusBarStyle;
+		[self setNeedsStatusBarAppearanceUpdate];
+	}
+}
+
+
 @end

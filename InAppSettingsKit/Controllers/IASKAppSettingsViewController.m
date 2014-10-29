@@ -716,6 +716,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		targetViewController.customTitleValueCellValueFont = self.customTitleValueCellValueFont;
 		targetViewController.customHeaderFont = self.customHeaderFont;
 		targetViewController.customFooterFont = self.customFooterFont;
+		targetViewController.statusBarStyle = self.statusBarStyle;
 		
         _currentChildViewController = targetViewController;
         [[self navigationController] pushViewController:targetViewController animated:YES];
@@ -790,6 +791,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		targetViewController.customTitleValueCellValueFont = self.customTitleValueCellValueFont;
 		targetViewController.customHeaderFont = self.customHeaderFont;
 		targetViewController.customFooterFont = self.customFooterFont;
+		targetViewController.statusBarStyle = self.statusBarStyle;
 		
         targetViewController.showDoneButton = NO;
         targetViewController.showCreditsFooter = NO; // Does not reload the tableview (but next setters do it)
@@ -1036,5 +1038,22 @@ CGRect IASKCGRectSwap(CGRect rect) {
 		[self clearHeaderFooterCache];
 	}
 }
+
+#pragma mark - Status Bar Style
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+	return self.statusBarStyle;
+}
+
+- (void)setStatusBarStyle:(UIStatusBarStyle)statusBarStyle
+{
+	if (_statusBarStyle != statusBarStyle)
+	{
+		_statusBarStyle = statusBarStyle;
+		[self setNeedsStatusBarAppearanceUpdate];
+	}
+}
+
 
 @end

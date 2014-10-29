@@ -33,6 +33,8 @@
 @property (nonatomic, retain) NSIndexPath *checkedItem;
 @property (nonatomic, retain) IASKSpecifier *currentSpecifier;
 
+@property (nonatomic) UIStatusBarStyle statusBarStyle;
+
 @property (nonatomic, strong) UIFont *customTitleValueCellTitleFont;
 @property (nonatomic, strong) UIFont *customTitleValueCellValueFont;
 @property (nonatomic, strong) UIFont *customHeaderFont;

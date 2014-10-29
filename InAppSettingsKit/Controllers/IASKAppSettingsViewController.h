@@ -69,6 +69,8 @@
 @property (nonatomic, assign) BOOL showDoneButton;
 @property (nonatomic, retain) NSSet *hiddenKeys;
 
+@property (nonatomic) UIStatusBarStyle statusBarStyle;
+
 @property (nonatomic, strong) UIFont *customTitleValueCellTitleFont;
 @property (nonatomic, strong) UIFont *customTitleValueCellValueFont;
 @property (nonatomic, strong) UIFont *customHeaderFont;
