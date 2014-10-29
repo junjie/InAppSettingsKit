@@ -242,4 +242,47 @@
 	}
 }
 
+#pragma mark - Header Footer
+
+- (void)clearHeaderFooterCache
+{
+	self.footerLabel = nil;
+}
+
+- (void)setCustomTitleValueCellTitleFont:(UIFont *)customTitleValueCellTitleFont
+{
+	if (_customTitleValueCellTitleFont != customTitleValueCellTitleFont)
+	{
+		_customTitleValueCellTitleFont = customTitleValueCellTitleFont;
+		[self.tableView reloadData];
+	}
+}
+
+- (void)setCustomTitleValueCellValueFont:(UIFont *)customTitleValueCellValueFont
+{
+	if (_customTitleValueCellValueFont != customTitleValueCellValueFont)
+	{
+		_customTitleValueCellValueFont = customTitleValueCellValueFont;
+		[self.tableView reloadData];
+	}
+}
+
+- (void)setCustomHeaderFont:(UIFont *)customHeaderFont
+{
+	if (_customHeaderFont != customHeaderFont)
+	{
+		_customHeaderFont = customHeaderFont;
+		[self clearHeaderFooterCache];
+	}
+}
+
+- (void)setCustomFooterFont:(UIFont *)customFooterFont
+{
+	if (_customFooterFont != customFooterFont)
+	{
+		_customFooterFont = customFooterFont;
+		[self clearHeaderFooterCache];
+	}
+}
+
 @end

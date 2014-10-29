@@ -38,4 +38,6 @@
 @property (nonatomic, strong) UIFont *customHeaderFont;
 @property (nonatomic, strong) UIFont *customFooterFont;
 
+- (void)clearHeaderFooterCache;
+
 @end

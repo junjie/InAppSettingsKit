@@ -460,7 +460,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	
 	headerLabel = [[IASKTableViewHeaderLabel alloc] initWithFrame:CGRectZero];
-	headerLabel.font = self.customFooterFont;
+	headerLabel.font = self.customHeaderFont;
 	headerLabel.text = headerText;
 	
 	[self.headerFooterCache setObject:headerLabel forKey:cachedKey];
@@ -783,6 +783,14 @@ CGRect IASKCGRectSwap(CGRect rect);
         _reloadDisabled = YES; // Disable internal unnecessary reloads
         
         IASKAppSettingsViewController *targetViewController = [[[self class] alloc] init];
+
+		// Set fonts before we setFile: because that causes reloadTable,
+		// and causes cached labels to be generated
+		targetViewController.customTitleValueCellTitleFont = self.customTitleValueCellTitleFont;
+		targetViewController.customTitleValueCellValueFont = self.customTitleValueCellValueFont;
+		targetViewController.customHeaderFont = self.customHeaderFont;
+		targetViewController.customFooterFont = self.customFooterFont;
+		
         targetViewController.showDoneButton = NO;
         targetViewController.showCreditsFooter = NO; // Does not reload the tableview (but next setters do it)
         targetViewController.delegate = self.delegate;
@@ -793,11 +801,6 @@ CGRect IASKCGRectSwap(CGRect rect);
 		targetViewController.view.tintColor = self.view.tintColor;
         _currentChildViewController = targetViewController;
 		
-		targetViewController.customTitleValueCellTitleFont = self.customTitleValueCellTitleFont;
-		targetViewController.customTitleValueCellValueFont = self.customTitleValueCellValueFont;
-		targetViewController.customHeaderFont = self.customHeaderFont;
-		targetViewController.customFooterFont = self.customFooterFont;
-        
         _reloadDisabled = NO;
         [self.tableView reloadData];
         
@@ -988,13 +991,49 @@ CGRect IASKCGRectSwap(CGRect rect) {
 	return newRect;
 }
 
-#pragma mark - 
+#pragma mark - Header Footer
 
 - (void)clearHeaderFooterCache
 {
 	if (_headerFooterCache)
 	{
 		[self.headerFooterCache removeAllObjects];
+	}
+}
+
+- (void)setCustomTitleValueCellTitleFont:(UIFont *)customTitleValueCellTitleFont
+{
+	if (_customTitleValueCellTitleFont != customTitleValueCellTitleFont)
+	{
+		_customTitleValueCellTitleFont = customTitleValueCellTitleFont;
+		[self.tableView reloadData];
+	}
+}
+
+- (void)setCustomTitleValueCellValueFont:(UIFont *)customTitleValueCellValueFont
+{
+	if (_customTitleValueCellValueFont != customTitleValueCellValueFont)
+	{
+		_customTitleValueCellValueFont = customTitleValueCellValueFont;
+		[self.tableView reloadData];
+	}
+}
+
+- (void)setCustomHeaderFont:(UIFont *)customHeaderFont
+{
+	if (_customHeaderFont != customHeaderFont)
+	{
+		_customHeaderFont = customHeaderFont;
+		[self clearHeaderFooterCache];
+	}
+}
+
+- (void)setCustomFooterFont:(UIFont *)customFooterFont
+{
+	if (_customFooterFont != customFooterFont)
+	{
+		_customFooterFont = customFooterFont;
+		[self clearHeaderFooterCache];
 	}
 }
 
