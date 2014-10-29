@@ -57,6 +57,8 @@
 
 - (void)loadView
 {
+	_statusBarStyle = UIStatusBarStyleDefault;
+	
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
     UIViewAutoresizingFlexibleHeight;

@@ -129,6 +129,8 @@ CGRect IASKCGRectSwap(CGRect rect);
         _showDoneButton = YES;
         // If set to YES, will display credits for InAppSettingsKit creators
         _showCreditsFooter = YES;
+		
+		_statusBarStyle = UIStatusBarStyleDefault;
     }
     return self;
 }
