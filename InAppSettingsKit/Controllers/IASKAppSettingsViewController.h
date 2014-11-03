@@ -76,6 +76,7 @@
 @property (nonatomic, strong) UIFont *customHeaderFont;
 @property (nonatomic, strong) UIFont *customFooterFont;
 
+- (void)reload
 - (void)synchronizeSettings;
 - (void)dismiss:(id)sender;
 - (void)setHiddenKeys:(NSSet*)hiddenKeys animated:(BOOL)animated;

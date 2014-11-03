@@ -56,7 +56,6 @@ CGRect IASKCGRectSwap(CGRect rect);
 - (void)_textChanged:(id)sender;
 - (void)synchronizeSettings;
 - (void)userDefaultsDidChange;
-- (void)reload;
 @end
 
 @implementation IASKAppSettingsViewController
@@ -207,7 +206,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	
 	NSNotificationCenter *dc = [NSNotificationCenter defaultCenter];
 	[dc addObserver:self selector:@selector(synchronizeSettings) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
-	[dc addObserver:self selector:@selector(reload) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
+	[dc addObserver:self selector:@selector(reloadAfterDelay) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 	[dc addObserver:self selector:@selector(synchronizeSettings) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
 	
 	// Reload and deselect the last selection. In iOS 8 attempting to reload
@@ -948,6 +947,13 @@ CGRect IASKCGRectSwap(CGRect rect);
     [self.tableView endEditing:NO];
 }
 
+#pragma mark - Reloading
+
+- (void)reload
+{
+	[self.tableView reloadData];
+}
+
 #pragma mark Notifications
 
 - (void)synchronizeSettings {
@@ -980,7 +986,7 @@ static NSDictionary *oldUserDefaults = nil;
 	}
 }
 
-- (void)reload {
+- (void)reloadOnDelay {
 	// wait 0.5 sec until UI is available after applicationWillEnterForeground
 	[self.tableView performSelector:@selector(reloadData) withObject:nil afterDelay:0.5];
 }
