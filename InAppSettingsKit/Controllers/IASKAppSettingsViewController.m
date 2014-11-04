@@ -206,7 +206,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	
 	NSNotificationCenter *dc = [NSNotificationCenter defaultCenter];
 	[dc addObserver:self selector:@selector(synchronizeSettings) name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
-	[dc addObserver:self selector:@selector(reloadAfterDelay) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
+	[dc addObserver:self selector:@selector(reloadOnDelay) name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 	[dc addObserver:self selector:@selector(synchronizeSettings) name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
 	
 	// Reload and deselect the last selection. In iOS 8 attempting to reload
