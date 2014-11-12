@@ -18,11 +18,13 @@
 	{
 		if (textLabelFont)
 		{
+			_textLabelFont = textLabelFont;
 			self.textLabel.font = textLabelFont;
 		}
 		
 		if (valueLabelFont)
 		{
+			_valueLabelFont = valueLabelFont;
 			self.detailTextLabel.font = valueLabelFont;
 		}
 	}
@@ -76,6 +78,34 @@
 	{
 		self.selectedBackgroundView = selectedBackgroundView;
 	}
+}
+
+#pragma mark - Fonts
+
+- (void)setTextLabelFont:(UIFont *)textLabelFont
+{
+	if (_textLabelFont != textLabelFont)
+	{
+		_textLabelFont = textLabelFont;
+		self.textLabel.font = textLabelFont;
+	}
+}
+
+- (void)setValueLabelFont:(UIFont *)valueLabelFont
+{
+	if (_valueLabelFont != valueLabelFont)
+	{
+		_valueLabelFont = valueLabelFont;
+		self.detailTextLabel.font = valueLabelFont;
+	}
+}
+
+#pragma mark - 
+
+- (void)prepareForReuse
+{
+	self.textLabel.font = self.textLabelFont;
+	self.detailTextLabel.font = self.valueLabelFont;
 }
 
 @end

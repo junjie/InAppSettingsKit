@@ -14,6 +14,9 @@
 @property (strong, nonatomic) UIColor *valueLabelColor UI_APPEARANCE_SELECTOR;
 @property (strong, nonatomic) UIColor *selectedBackgroundColor UI_APPEARANCE_SELECTOR;
 
+@property (strong, nonatomic) UIFont *textLabelFont;
+@property (strong, nonatomic) UIFont *valueLabelFont;
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier textLabelFont:(UIFont *)textLabelFont valueLabelFont:(UIFont *)valueLabelFont;
 
 @end

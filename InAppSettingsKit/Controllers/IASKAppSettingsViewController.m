@@ -52,6 +52,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 @property (nonatomic, strong) id currentFirstResponder;
 @property (nonatomic, strong) NSCache *headerFooterCache;
+@property (nonatomic, strong) kIASKPSGenericTableViewCell *genericLayoutCell;
 
 - (void)_textChanged:(id)sender;
 - (void)synchronizeSettings;
@@ -406,6 +407,25 @@ CGRect IASKCGRectSwap(CGRect rect);
 	return tableView.rowHeight;
 }
 
+/// Estimated height should be provided for auto layout to work correctly
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	if (!self.genericLayoutCell)
+	{
+		kIASKPSGenericTableViewCell *layoutCell = [[kIASKPSGenericTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LayoutCell" textLabelFont:self.customTitleValueCellTitleFont valueLabelFont:self.customTitleValueCellValueFont];
+		
+		layoutCell.textLabel.text = @"Layout";
+		layoutCell.detailTextLabel.text = @"Calculation";
+		
+		self.genericLayoutCell = layoutCell;
+	}
+	
+	CGSize fittingSize =
+	[self.genericLayoutCell systemLayoutSizeFittingSize:CGSizeMake(CGRectGetWidth(self.tableView.frame), 0)];
+	
+	return fittingSize.height;
+}
+
 - (NSString *)tableView:(UITableView*)tableView titleForHeaderInSection:(NSInteger)section {
     NSString *header = [self.settingsReader titleForSection:section];
 	if (0 == header.length) {
@@ -574,8 +594,16 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	
 	UITableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:specifier.type];
-	if(nil == cell) {
-      cell = [self newCellForIdentifier:specifier.type];
+	if (nil == cell) {
+		cell = [self newCellForIdentifier:specifier.type];
+	}
+	// Update font size if needed
+	else if ([cell respondsToSelector:@selector(setTextLabelFont:)] &&
+			 [cell respondsToSelector:@selector(setValueLabelFont:)])
+	{
+		kIASKPSGenericTableViewCell *genericCell = (kIASKPSGenericTableViewCell *)cell;
+		genericCell.textLabelFont = self.customTitleValueCellTitleFont;
+		genericCell.valueLabelFont = self.customTitleValueCellValueFont;
 	}
 	
 	if ([specifier.type isEqualToString:kIASKPSToggleSwitchSpecifier]) {
@@ -1016,7 +1044,7 @@ CGRect IASKCGRectSwap(CGRect rect) {
 	if (_customTitleValueCellTitleFont != customTitleValueCellTitleFont)
 	{
 		_customTitleValueCellTitleFont = customTitleValueCellTitleFont;
-		[self.tableView reloadData];
+		self.genericLayoutCell = nil;
 	}
 }
 
@@ -1025,7 +1053,7 @@ CGRect IASKCGRectSwap(CGRect rect) {
 	if (_customTitleValueCellValueFont != customTitleValueCellValueFont)
 	{
 		_customTitleValueCellValueFont = customTitleValueCellValueFont;
-		[self.tableView reloadData];
+		self.genericLayoutCell = nil;
 	}
 }
 
