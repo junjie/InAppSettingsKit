@@ -436,19 +436,21 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (UIView *)tableView:(UITableView*)tableView viewForHeaderInSection:(NSInteger)section {
 	if ([self.delegate respondsToSelector:@selector(settingsViewController:tableView:viewForHeaderForSection:)]) {
-		return [self.delegate settingsViewController:self tableView:tableView viewForHeaderForSection:section];
+		UIView *view;
+		if ((view = [self.delegate settingsViewController:self tableView:tableView viewForHeaderForSection:section])) {
+			return view;
+		}
 	}
 
 	return [self headerViewForTableView:tableView section:section];
 }
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
-	if ([self tableView:tableView viewForHeaderInSection:section] && [self.delegate respondsToSelector:@selector(settingsViewController:tableView:heightForHeaderForSection:)]) {
+	if ([self.delegate respondsToSelector:@selector(settingsViewController:tableView:heightForHeaderForSection:)] && [self tableView:tableView viewForHeaderInSection:section]) {
 		CGFloat result;
 		if ((result = [self.delegate settingsViewController:self tableView:tableView heightForHeaderForSection:section])) {
 			return result;
 		}
-		
 	}
 
 	IASKTableViewHeaderLabel *titleView = [self headerViewForTableView:tableView section:section];
