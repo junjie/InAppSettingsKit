@@ -447,16 +447,15 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (CGFloat)tableView:(UITableView*)tableView heightForHeaderInSection:(NSInteger)section {
 	if ([self.delegate respondsToSelector:@selector(settingsViewController:tableView:heightForHeaderForSection:)] && [self tableView:tableView viewForHeaderInSection:section]) {
-		CGFloat result;
-		if ((result = [self.delegate settingsViewController:self tableView:tableView heightForHeaderForSection:section])) {
+		CGFloat result = [self.delegate settingsViewController:self tableView:tableView heightForHeaderForSection:section];
+		if (result != UITableViewAutomaticDimension && result > 0) {
 			return result;
 		}
 	}
 
 	IASKTableViewHeaderLabel *titleView = [self headerViewForTableView:tableView section:section];
 
-	if (!titleView)
-	{
+	if (!titleView) {
 		return UITableViewAutomaticDimension;
 	}
 

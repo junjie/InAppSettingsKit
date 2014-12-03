@@ -28,6 +28,8 @@
                applicationBundle:(NSBundle*) bundle {
     self = [super init];
     if (self) {
+		_fileName = fileName;
+		
         _applicationBundle = bundle;
         
         NSString* plistFilePath = [self locateSettingsFile: fileName];

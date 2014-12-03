@@ -8,6 +8,16 @@
 
 #import "IASKTableViewHeaderFooterLabel.h"
 
+CGFloat const kIASKTableViewHeaderLabelInsetsTop = 0.0;
+CGFloat const kIASKTableViewHeaderLabelInsetsLeft = 15.0;
+CGFloat const kIASKTableViewHeaderLabelInsetsBottomMultiple = 0.25;
+CGFloat const kIASKTableViewHeaderLabelInsetsRight = 15.0;
+
+CGFloat const kIASKTableViewFooterLabelInsetsTopMultiple = 0.25;
+CGFloat const kIASKTableViewFooterLabelInsetsLeft = 15.0;
+CGFloat const kIASKTableViewFooterLabelInsetsBottomMultiple = 1.25;
+CGFloat const kIASKTableViewFooterLabelInsetsRight = 15.0;
+
 @implementation IASKTableViewHeaderLabel
 
 - (instancetype)initWithFrame:(CGRect)frame
@@ -18,13 +28,26 @@
 	{
 		_transformTextToAllCaps = YES;
 		self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-		self.edgeInsets = UIEdgeInsetsMake(0, 15, 5, 15);
 		self.textColor = IASKTableViewHeaderFooterLabelColor();
-		self.numberOfLines = 1;
+		self.numberOfLines = 0;
 		self.lineBreakMode = NSLineBreakByTruncatingTail;
+		
+		[self updateEdgeInsets];
 	}
 	
 	return self;
+}
+
+- (void)setLabelFont:(UIFont *)labelFont
+{
+	[super setLabelFont:labelFont];
+	[self updateEdgeInsets];
+}
+
+- (void)setFont:(UIFont *)font
+{
+	[super setFont:font];
+	[self updateEdgeInsets];
 }
 
 - (void)setText:(NSString *)text
@@ -39,6 +62,11 @@
 	}
 }
 
+- (void)updateEdgeInsets
+{
+	self.edgeInsets = UIEdgeInsetsMake(kIASKTableViewHeaderLabelInsetsTop, kIASKTableViewHeaderLabelInsetsLeft, ceil(self.font.pointSize *kIASKTableViewHeaderLabelInsetsBottomMultiple), kIASKTableViewHeaderLabelInsetsRight);
+}
+
 @end
 
 @implementation IASKTableViewFooterLabel
@@ -50,10 +78,11 @@
 	if (self)
 	{
 		self.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-		self.edgeInsets = UIEdgeInsetsMake(4, 15, 20, 15);
 		self.textColor = IASKTableViewHeaderFooterLabelColor();
 		self.numberOfLines = 0;
 		self.lineBreakMode = NSLineBreakByTruncatingTail;
+		
+		[self updateEdgeInsets];
 	}
 	
 	return self;
@@ -62,6 +91,18 @@
 - (void)setLabelFont:(UIFont *)labelFont
 {
 	[super setLabelFont:labelFont];
+	[self updateEdgeInsets];
+}
+
+- (void)setFont:(UIFont *)font
+{
+	[super setFont:font];
+	[self updateEdgeInsets];
+}
+
+- (void)updateEdgeInsets
+{
+	self.edgeInsets = UIEdgeInsetsMake(ceil(self.font.pointSize * kIASKTableViewFooterLabelInsetsTopMultiple), kIASKTableViewFooterLabelInsetsLeft, ceil(self.font.pointSize * kIASKTableViewFooterLabelInsetsBottomMultiple), kIASKTableViewFooterLabelInsetsRight);
 }
 
 @end

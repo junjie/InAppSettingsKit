@@ -204,6 +204,9 @@ _Pragma("clang diagnostic pop")
 - (NSString*)titleForStringId:(NSString*)stringId;
 - (NSString*)pathForImageNamed:(NSString*)image;
 
+///the filename of the plist read
+@property (nonatomic, readonly) NSString      *fileName;
+
 ///the main application bundle. most often [NSBundle mainBundle]
 @property (nonatomic, readonly) NSBundle      *applicationBundle;
 
