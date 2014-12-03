@@ -37,6 +37,7 @@
 - (NSString*)file;
 - (id)defaultValue;
 - (id)defaultStringValue;
+- (NSURL *)URLValue;
 - (BOOL)defaultBoolValue;
 - (id)trueValue;
 - (id)falseValue;

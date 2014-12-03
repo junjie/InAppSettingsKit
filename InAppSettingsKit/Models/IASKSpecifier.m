@@ -198,6 +198,14 @@
     return [[_specifierDict objectForKey:kIASKDefaultValue] description];
 }
 
+- (NSURL *)URLValue {
+	NSString *URLString = [_specifierDict objectForKey:kIASKURLValue];
+	if (!URLString) {
+		return nil;
+	}
+	return [NSURL URLWithString:URLString];
+}
+
 - (BOOL)defaultBoolValue {
 	id defaultValue = [self defaultValue];
 	if ([defaultValue isEqual:[self trueValue]]) {
@@ -332,7 +340,7 @@
     }
     if ([self.type isEqualToString:kIASKButtonSpecifier] && !self.cellImage) {
 		return NSTextAlignmentCenter;
-	} else if ([self.type isEqualToString:kIASKPSMultiValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueButtonSpecifier] || self.stringValueForChildPane) {
+	} else if ([self.type isEqualToString:kIASKPSMultiValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueButtonSpecifier] || [self.type isEqualToString:kIASKOpenURLSpecifier] || [self.type isEqualToString:kIASKMailComposeSpecifier] || self.stringValueForChildPane) {
 		return NSTextAlignmentRight;
 	}
 	return NSTextAlignmentLeft;

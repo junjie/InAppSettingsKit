@@ -30,6 +30,7 @@
 #define kIASKMaximumValue                     @"MaximumValue"
 #define kIASKTrueValue                        @"TrueValue"
 #define kIASKFalseValue                       @"FalseValue"
+#define kIASKURLValue					      @"URLValue"
 #define kIASKIsSecure                         @"IsSecure"
 #define KIASKKeyboardType                     @"KeyboardType"
 #define kIASKAutocapitalizationType           @"AutocapitalizationType"
