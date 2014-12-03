@@ -31,7 +31,8 @@
         [self setSpecifierDict:specifier];
         
         if ([[self type] isEqualToString:kIASKPSMultiValueSpecifier] ||
-			[[self type] isEqualToString:kIASKPSTitleValueSpecifier]) {
+			[[self type] isEqualToString:kIASKPSTitleValueSpecifier] ||
+			[[self type] isEqualToString:kIASKPSTitleValueButtonSpecifier]) {
             [self _reinterpretValues:[self specifierDict]];
         }
     }
@@ -331,7 +332,7 @@
     }
     if ([self.type isEqualToString:kIASKButtonSpecifier] && !self.cellImage) {
 		return NSTextAlignmentCenter;
-	} else if ([self.type isEqualToString:kIASKPSMultiValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueSpecifier] || self.stringValueForChildPane) {
+	} else if ([self.type isEqualToString:kIASKPSMultiValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueButtonSpecifier] || self.stringValueForChildPane) {
 		return NSTextAlignmentRight;
 	}
 	return NSTextAlignmentLeft;

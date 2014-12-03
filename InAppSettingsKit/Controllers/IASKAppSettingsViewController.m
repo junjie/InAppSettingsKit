@@ -560,7 +560,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		[((IASKSwitch*)cell.accessoryView) addTarget:self action:@selector(toggledValue:) forControlEvents:UIControlEventValueChanged];
 		cell.selectionStyle = UITableViewCellSelectionStyleNone;
 	}
-	else if ([identifier isEqualToString:kIASKPSMultiValueSpecifier] || [identifier isEqualToString:kIASKPSTitleValueSpecifier]) {
+	else if ([identifier isEqualToString:kIASKPSMultiValueSpecifier] || [identifier isEqualToString:kIASKPSTitleValueSpecifier] || [identifier isEqualToString:kIASKPSTitleValueButtonSpecifier]) {
 		cell = [[IASKPSTitleValueSpecifierViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:identifier textLabelFont:self.customTitleValueCellTitleFont valueLabelFont:self.customTitleValueCellValueFont];
 		cell.accessoryType = [identifier isEqualToString:kIASKPSMultiValueSpecifier] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 	}
@@ -632,7 +632,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		cell.detailTextLabel.text = [[specifier titleForCurrentValue:[self.settingsStore objectForKey:specifier.key] != nil ? 
 									  [self.settingsStore objectForKey:specifier.key] : specifier.defaultValue] description];
 	}
-	else if ([specifier.type isEqualToString:kIASKPSTitleValueSpecifier]) {
+	else if ([specifier.type isEqualToString:kIASKPSTitleValueSpecifier] || [specifier.type isEqualToString:kIASKPSTitleValueButtonSpecifier]) {
 		cell.textLabel.text = specifier.title;
 		id value = [self.settingsStore objectForKey:specifier.key] ? : specifier.defaultValue;
 		
@@ -644,7 +644,17 @@ CGRect IASKCGRectSwap(CGRect rect);
 		}
 		
 		cell.detailTextLabel.text = stringValue;
-		cell.userInteractionEnabled = NO;
+		
+		if ([specifier.type isEqualToString:kIASKPSTitleValueButtonSpecifier])
+		{
+			cell.userInteractionEnabled = YES;
+			cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+		}
+		else
+		{
+			cell.userInteractionEnabled = NO;
+			cell.accessoryType = UITableViewCellAccessoryNone;
+		}
 	}
 	else if ([specifier.type isEqualToString:kIASKPSTextFieldSpecifier]) {
 		cell.textLabel.text = specifier.title;
@@ -704,7 +714,7 @@ CGRect IASKCGRectSwap(CGRect rect);
     
 	BOOL hasDetailedTextLabel = [cell.detailTextLabel.text length] > 0;
 	
-	if (!hasDetailedTextLabel && ![specifier.type isEqualToString:kIASKPSMultiValueSpecifier] && ![specifier.type isEqualToString:kIASKPSTitleValueSpecifier] && ![specifier.type isEqualToString:kIASKPSTextFieldSpecifier]) {
+	if (!hasDetailedTextLabel && ![specifier.type isEqualToString:kIASKPSMultiValueSpecifier] && ![specifier.type isEqualToString:kIASKPSTitleValueSpecifier] && ![specifier.type isEqualToString:kIASKPSTitleValueButtonSpecifier] && ![specifier.type isEqualToString:kIASKPSTextFieldSpecifier]) {
 		cell.textLabel.textAlignment = specifier.textAlignment;
 	}
 	cell.detailTextLabel.textAlignment = specifier.textAlignment;
@@ -841,7 +851,8 @@ CGRect IASKCGRectSwap(CGRect rect);
     } else if ([[specifier type] isEqualToString:kIASKOpenURLSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:specifier.file]];
-    } else if ([[specifier type] isEqualToString:kIASKButtonSpecifier]) {
+    } else if ([[specifier type] isEqualToString:kIASKButtonSpecifier] ||
+			   [[specifier type] isEqualToString:kIASKPSTitleValueButtonSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
         if ([self.delegate respondsToSelector:@selector(settingsViewController:buttonTappedForSpecifier:)]) {
             [self.delegate settingsViewController:self buttonTappedForSpecifier:specifier];

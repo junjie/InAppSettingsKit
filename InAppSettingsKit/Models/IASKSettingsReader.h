@@ -82,6 +82,7 @@
 #define kIASKPSMultiValueSpecifier            @"PSMultiValueSpecifier"
 #define kIASKPSSliderSpecifier                @"PSSliderSpecifier"
 #define kIASKPSTitleValueSpecifier            @"PSTitleValueSpecifier"
+#define kIASKPSTitleValueButtonSpecifier      @"PSTitleValueButtonSpecifier"
 #define kIASKPSTextFieldSpecifier             @"PSTextFieldSpecifier"
 #define kIASKPSChildPaneSpecifier             @"PSChildPaneSpecifier"
 #define kIASKOpenURLSpecifier                 @"IASKOpenURLSpecifier"
