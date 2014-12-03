@@ -634,7 +634,10 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	else if ([specifier.type isEqualToString:kIASKPSTitleValueSpecifier] || [specifier.type isEqualToString:kIASKPSTitleValueButtonSpecifier]) {
 		cell.textLabel.text = specifier.title;
-		id value = [self.settingsStore objectForKey:specifier.key] ? : specifier.defaultValue;
+		
+		NSString *key = specifier.key;
+		NSString *objectForKey = key ? [self.settingsStore objectForKey:key] : nil;
+		id value = objectForKey ?: specifier.defaultValue;
 		
 		NSString *stringValue;
 		if (specifier.multipleValues || specifier.multipleTitles) {
