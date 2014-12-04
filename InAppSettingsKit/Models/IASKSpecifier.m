@@ -143,6 +143,12 @@
 		return nil;
 	}
 	
+	NSString *defaultValue = [self defaultValue];
+	if ([defaultValue isKindOfClass:[NSString class]] && [defaultValue length] > 0)
+	{
+		return defaultValue;
+	}
+	
 	SEL valueSelector = [self viewControllerValueSelector];
 	if (!valueSelector) {
 		return nil;
