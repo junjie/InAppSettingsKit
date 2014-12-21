@@ -98,6 +98,7 @@
 #define kIASKChildTitle                       @"IASKChildTitle"
 
 #define kIASKAppSettingChanged                @"kAppSettingChanged"
+#define kIASKAppSettingChangedOldKey          @"kIASKAppSettingChangedOldKey"
 
 #define kIASKSectionHeaderIndex               0
 

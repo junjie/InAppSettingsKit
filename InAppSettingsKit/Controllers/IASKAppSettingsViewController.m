@@ -351,7 +351,9 @@ CGRect IASKCGRectSwap(CGRect rect);
 - (void)toggledValue:(id)sender {
     IASKSwitch *toggle    = (IASKSwitch*)sender;
     IASKSpecifier *spec   = [_settingsReader specifierForKey:[toggle key]];
-    
+	
+	id oldValue = [self.settingsStore objectForKey:[toggle key]];
+	
     if ([toggle isOn]) {
         if ([spec trueValue] != nil) {
             [self.settingsStore setObject:[spec trueValue] forKey:[toggle key]];
@@ -368,19 +370,30 @@ CGRect IASKCGRectSwap(CGRect rect);
             [self.settingsStore setBool:NO forKey:[toggle key]]; 
         }
     }
+	
+	NSDictionary *userInfo =
+	@{ [toggle key] : [self.settingsStore objectForKey:[toggle key]],
+	   kIASKAppSettingChangedOldKey : oldValue };
+	
     [[NSNotificationCenter defaultCenter] postNotificationName:kIASKAppSettingChanged
                                                         object:[toggle key]
-                                                      userInfo:[NSDictionary dictionaryWithObject:[self.settingsStore objectForKey:[toggle key]]
-                                                                                           forKey:[toggle key]]];
+													  userInfo:userInfo];
 }
 
 - (void)sliderChangedValue:(id)sender {
     IASKSlider *slider = (IASKSlider*)sender;
+	
+	id oldValue = [self.settingsStore objectForKey:[slider key]];
+	
     [self.settingsStore setFloat:[slider value] forKey:[slider key]];
+	
+	NSDictionary *userInfo =
+	@{ [slider key] : [self.settingsStore objectForKey:[slider key]],
+	   kIASKAppSettingChangedOldKey : oldValue };
+	
     [[NSNotificationCenter defaultCenter] postNotificationName:kIASKAppSettingChanged
                                                         object:[slider key]
-                                                      userInfo:[NSDictionary dictionaryWithObject:[NSNumber numberWithFloat:[slider value]]
-                                                                                           forKey:[slider key]]];
+                                                      userInfo:userInfo];
 }
 
 
@@ -974,11 +987,17 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (void)_textChanged:(id)sender {
     IASKTextField *text = sender;
+	
+	id oldValue = [_settingsStore objectForKey:[text key]];
     [_settingsStore setObject:[text text] forKey:[text key]];
+
+	NSDictionary *userInfo =
+	@{ [text key] : [text text],
+	   kIASKAppSettingChangedOldKey : oldValue };
+	
     [[NSNotificationCenter defaultCenter] postNotificationName:kIASKAppSettingChanged
                                                         object:[text key]
-                                                      userInfo:[NSDictionary dictionaryWithObject:[text text]
-                                                                                           forKey:[text key]]];
+													  userInfo:userInfo];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{

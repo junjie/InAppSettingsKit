@@ -215,12 +215,18 @@
     [self selectCell:[tableView cellForRowAtIndexPath:indexPath]];
     [self setCheckedItem:indexPath];
 	
+	id oldValue = [self.settingsStore objectForKey:[_currentSpecifier key]];
+	
     [self.settingsStore setObject:[values objectAtIndex:indexPath.row] forKey:[_currentSpecifier key]];
 	[self.settingsStore synchronize];
+	
+	NSDictionary *userInfo =
+	@{ [_currentSpecifier key] : [values objectAtIndex:indexPath.row],
+	   kIASKAppSettingChangedOldKey : oldValue };
+	
     [[NSNotificationCenter defaultCenter] postNotificationName:kIASKAppSettingChanged
                                                         object:[_currentSpecifier key]
-                                                      userInfo:[NSDictionary dictionaryWithObject:[values objectAtIndex:indexPath.row]
-                                                                                           forKey:[_currentSpecifier key]]];
+													  userInfo:userInfo];
 }
 
 - (CGSize)contentSizeForViewInPopover {
