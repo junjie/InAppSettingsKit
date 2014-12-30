@@ -40,9 +40,11 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    
+	
+	CGFloat leftInset = self.separatorInset.left;
+	
     // Label
-	CGFloat imageOffset = self.imageView.image ? self.imageView.bounds.size.width + kIASKPaddingLeft : 0;
+	CGFloat imageOffset = self.imageView.image ? self.imageView.bounds.size.width + leftInset : 0;
     CGSize labelSize = [self.textLabel sizeThatFits:CGSizeZero];
 	labelSize.width = MAX(labelSize.width, kIASKMinLabelWidth - imageOffset);
     self.textLabel.frame = (CGRect){self.textLabel.frame.origin, {MIN(kIASKMaxLabelWidth, labelSize.width), self.textLabel.frame.size.height}} ;
@@ -54,8 +56,8 @@
 	textFieldFrame.size.width = _textField.superview.frame.size.width - textFieldFrame.origin.x - kIASKPaddingRight;
 	
 	if (!self.textLabel.text.length) {
-		textFieldFrame.origin.x = kIASKPaddingLeft + imageOffset;
-		textFieldFrame.size.width = self.contentView.bounds.size.width - 2* kIASKPaddingLeft - imageOffset;
+		textFieldFrame.origin.x = leftInset + imageOffset;
+		textFieldFrame.size.width = self.contentView.bounds.size.width - 2* leftInset - imageOffset;
 	} else if (_textField.textAlignment == NSTextAlignmentRight) {
 		textFieldFrame.origin.x = self.textLabel.frame.origin.x + labelSize.width + kIASKSpacing;
 		textFieldFrame.size.width = _textField.superview.frame.size.width - textFieldFrame.origin.x - kIASKPaddingRight;

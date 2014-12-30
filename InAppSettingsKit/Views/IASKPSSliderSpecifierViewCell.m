@@ -67,7 +67,7 @@
 		_minImage.hidden = NO;
 		sliderCenter.x    += (kIASKSliderImagesPadding - kIASKSliderNoImagesPadding) / 2;
 		sliderBounds.size.width  -= (kIASKSliderImagesPadding - kIASKSliderNoImagesPadding);
-        _minImage.center = CGPointMake(_minImage.frame.size.width / 2 + kIASKPaddingLeft,
+        _minImage.center = CGPointMake(_minImage.frame.size.width / 2 + self.separatorInset.left,
                                        self.contentView.center.y);
     }
 	if (_maxImage.image) {
