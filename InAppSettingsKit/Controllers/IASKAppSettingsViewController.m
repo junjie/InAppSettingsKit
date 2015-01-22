@@ -39,6 +39,8 @@ static NSString *kIASKCredits = @"Powered by InAppSettingsKit"; // Leave this as
 
 #define kIASKCreditsViewWidth                         285
 
+#define kIASKFirstSectionTitleTopInset                20
+
 CGRect IASKCGRectSwap(CGRect rect);
 
 @interface IASKAppSettingsViewController () {
@@ -484,8 +486,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 	{
 		return nil;
 	}
-	
-	NSString *cachedKey = [@"HEADER_" stringByAppendingString:headerText];
+
+	NSString *cachedKey = [[NSString stringWithFormat:@"HEADER_%ld_", (long)section] stringByAppendingString:headerText];
 	
 	IASKTableViewHeaderLabel *headerLabel = [self.headerFooterCache objectForKey:cachedKey];
 	
@@ -497,6 +499,13 @@ CGRect IASKCGRectSwap(CGRect rect);
 	headerLabel = [[IASKTableViewHeaderLabel alloc] initWithFrame:CGRectZero];
 	headerLabel.font = self.customHeaderFont;
 	headerLabel.text = headerText;
+	
+	if (section == 0)
+	{
+		UIEdgeInsets insets = headerLabel.edgeInsets;
+		insets.top += kIASKFirstSectionTitleTopInset;
+		headerLabel.edgeInsets = insets;
+	}
 	
 	[self.headerFooterCache setObject:headerLabel forKey:cachedKey];
 	
@@ -547,7 +556,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 		return nil;
 	}
 	
-	NSString *cachedKey = [@"FOOTER_" stringByAppendingString:footerText];
+	NSString *cachedKey = [[NSString stringWithFormat:@"FOOTER_%ld_", (long)section] stringByAppendingString:footerText];
 	
 	IASKTableViewFooterLabel *footerLabel = [self.headerFooterCache objectForKey:cachedKey];
 	
