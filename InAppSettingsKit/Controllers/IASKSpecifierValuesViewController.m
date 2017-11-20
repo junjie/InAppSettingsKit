@@ -147,7 +147,7 @@
 	
 	if (!footerView)
 	{
-		return UITableViewAutomaticDimension;
+		return 0;
 	}
 	
 	[footerView fitToWidth:CGRectGetWidth(tableView.frame)];
