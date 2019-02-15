@@ -188,10 +188,11 @@ CGRect IASKCGRectSwap(CGRect rect);
 	}
 	
 	if ([self.settingsStore isKindOfClass:[IASKSettingsStoreUserDefaults class]]) {
+		IASKSettingsStoreUserDefaults *udSettingsStore = (id)self.settingsStore;
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(userDefaultsDidChange)
 													 name:NSUserDefaultsDidChangeNotification
-												   object:[NSUserDefaults standardUserDefaults]];
+												   object:udSettingsStore.defaults];
 		
 		// Don't call this on viewWillAppear; this will interfere with
 		// our custom deselection animation on viewWillAppear:. In any case
@@ -235,7 +236,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 - (void)viewDidDisappear:(BOOL)animated {
 	NSNotificationCenter *dc = [NSNotificationCenter defaultCenter];
-	[dc removeObserver:self name:NSUserDefaultsDidChangeNotification object:[NSUserDefaults standardUserDefaults]];
+	IASKSettingsStoreUserDefaults *udSettingsStore = (id)self.settingsStore;
+	[dc removeObserver:self name:NSUserDefaultsDidChangeNotification object:udSettingsStore.defaults];
 	[dc removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:[UIApplication sharedApplication]];
 	[dc removeObserver:self name:UIApplicationWillEnterForegroundNotification object:[UIApplication sharedApplication]];
 	[dc removeObserver:self name:UIApplicationWillTerminateNotification object:[UIApplication sharedApplication]];
@@ -1034,7 +1036,8 @@ CGRect IASKCGRectSwap(CGRect rect);
 
 static NSDictionary *oldUserDefaults = nil;
 - (void)userDefaultsDidChange {
-	NSDictionary *currentDict = [NSUserDefaults standardUserDefaults].dictionaryRepresentation;
+	IASKSettingsStoreUserDefaults *udSettingsStore = (id)self.settingsStore;
+	NSDictionary *currentDict = udSettingsStore.defaults.dictionaryRepresentation;
 	NSMutableArray *indexPathsToUpdate = [NSMutableArray array];
 	for (NSString *key in currentDict.allKeys) {
 		if (![[oldUserDefaults valueForKey:key] isEqual:[currentDict valueForKey:key]]) {

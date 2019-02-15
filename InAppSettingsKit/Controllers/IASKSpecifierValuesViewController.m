@@ -50,9 +50,26 @@
 
 - (id<IASKSettingsStore>)settingsStore {
     if(_settingsStore == nil) {
-        _settingsStore = [[IASKSettingsStoreUserDefaults alloc] init];
+        self.settingsStore = [[IASKSettingsStoreUserDefaults alloc] init];
     }
     return _settingsStore;
+}
+
+- (void)setSettingsStore:(id<IASKSettingsStore>)settingsStore {
+	if ([_settingsStore isKindOfClass:IASKSettingsStoreUserDefaults.class]) {
+		IASKSettingsStoreUserDefaults *udSettingsStore = (id)_settingsStore;
+		[[NSNotificationCenter defaultCenter] removeObserver:self name:NSUserDefaultsDidChangeNotification object:udSettingsStore.defaults];
+	}
+	
+	_settingsStore = settingsStore;
+	
+	if ([settingsStore isKindOfClass:IASKSettingsStoreUserDefaults.class]) {
+		IASKSettingsStoreUserDefaults *udSettingsStore = (id)settingsStore;
+		[[NSNotificationCenter defaultCenter] addObserver:self
+												 selector:@selector(userDefaultsDidChange)
+													 name:NSUserDefaultsDidChangeNotification
+												   object:udSettingsStore.defaults];
+	}
 }
 
 - (void)loadView
