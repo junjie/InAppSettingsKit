@@ -103,10 +103,6 @@
 - (void)viewDidAppear:(BOOL)animated {
 	[_tableView flashScrollIndicators];
 	[super viewDidAppear:animated];
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(userDefaultsDidChange)
-												 name:NSUserDefaultsDidChangeNotification
-											   object:[NSUserDefaults standardUserDefaults]];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
