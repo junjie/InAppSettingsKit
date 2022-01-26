@@ -810,6 +810,7 @@ CGRect IASKCGRectSwap(CGRect rect);
                 initSelector = @selector(init);
             }
             UIViewController * vc = [vcClass alloc];
+            vc.title = specifier.title;
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
             vc = [vc performSelector:initSelector withObject:[specifier file] withObject:specifier];
