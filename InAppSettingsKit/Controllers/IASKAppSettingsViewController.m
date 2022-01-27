@@ -839,6 +839,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 									 withObject:[specifier file]
 									 withObject:specifier];
 #pragma clang diagnostic pop
+                vc.title = specifier.title;
 				[self.navigationController pushViewController:vc animated:YES];
 				return;
 			}
