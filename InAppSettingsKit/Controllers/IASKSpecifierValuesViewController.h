@@ -37,9 +37,6 @@
 
 @property (nonatomic, strong) UIFont *customTitleValueCellTitleFont;
 @property (nonatomic, strong) UIFont *customTitleValueCellValueFont;
-@property (nonatomic, strong) UIFont *customHeaderFont;
 @property (nonatomic, strong) UIFont *customFooterFont;
-
-- (void)clearHeaderFooterCache;
 
 @end

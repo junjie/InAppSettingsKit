@@ -781,7 +781,6 @@ CGRect IASKCGRectSwap(CGRect rect);
 		
 		targetViewController.customTitleValueCellTitleFont = self.customTitleValueCellTitleFont;
 		targetViewController.customTitleValueCellValueFont = self.customTitleValueCellValueFont;
-		targetViewController.customHeaderFont = self.customHeaderFont;
 		targetViewController.customFooterFont = self.customFooterFont;
 		targetViewController.statusBarStyle = self.statusBarStyle;
 		

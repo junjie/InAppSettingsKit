@@ -38,6 +38,7 @@
 #define kIASKValues                           @"Values"
 #define kIASKTitles                           @"Titles"
 #define kIASKShortTitles                      @"ShortTitles"
+#define kIASKFooters                          @"Footers"
 #define kIASKViewControllerClass              @"IASKViewControllerClass"
 #define kIASKViewControllerSelector           @"IASKViewControllerSelector"
 #define kIASKViewControllerValueSelector      @"IASKViewControllerValueSelector"

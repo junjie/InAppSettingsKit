@@ -34,6 +34,7 @@
 - (NSInteger)multipleValuesCount;
 - (NSArray*)multipleValues;
 - (NSArray*)multipleTitles;
+- (NSArray*)multipleFooters;
 - (NSString*)file;
 - (id)defaultValue;
 - (id)defaultStringValue;

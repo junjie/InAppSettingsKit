@@ -43,6 +43,7 @@
     NSArray *values = [_specifierDict objectForKey:kIASKValues];
     NSArray *titles = [_specifierDict objectForKey:kIASKTitles];
     NSArray *shortTitles = [_specifierDict objectForKey:kIASKShortTitles];
+    NSArray *footers = [_specifierDict objectForKey:kIASKFooters];
     NSMutableDictionary *multipleValuesDict = [NSMutableDictionary new];
     
     if (values) {
@@ -56,6 +57,10 @@
     if (shortTitles) {
 		[multipleValuesDict setObject:shortTitles forKey:kIASKShortTitles];
 	}
+    
+    if (footers) {
+        [multipleValuesDict setObject:footers forKey:kIASKFooters];
+    }
     
     [self setMultipleValuesDict:multipleValuesDict];
 }
@@ -190,6 +195,10 @@
 
 - (NSArray*)multipleShortTitles {
     return [_multipleValuesDict objectForKey:kIASKShortTitles];
+}
+
+- (NSArray *)multipleFooters {
+    return [_multipleValuesDict objectForKey:kIASKFooters];
 }
 
 - (NSString*)file {

@@ -48,6 +48,23 @@
 	[self setCheckedItem:[NSIndexPath indexPathForRow:index inSection:0]];
 }
 
+- (void)setCheckedItem:(NSIndexPath *)checkedItem {
+    if (_checkedItem != checkedItem) {
+        _checkedItem = checkedItem;
+        
+        NSArray *multipleFooters = [_currentSpecifier multipleFooters];
+        if (multipleFooters) {
+            [self iask_reloadFooter];
+        }
+    }
+}
+
+- (void)iask_reloadFooter {
+    // This is enough to trigger a call to heightForFooterInSection, which would call footerViewForTableView, which would update the footerLabel if any and size it accordingly
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
+}
+
 - (id<IASKSettingsStore>)settingsStore {
     if(_settingsStore == nil) {
         self.settingsStore = [[IASKSettingsStoreUserDefaults alloc] init];
@@ -151,6 +168,14 @@
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    NSArray *multipleFooters = [_currentSpecifier multipleFooters];
+    if (multipleFooters &&
+        multipleFooters.count == [_currentSpecifier multipleValuesCount] &&
+        multipleFooters.count > self.checkedItem.row) {
+        NSString *footer = [multipleFooters objectAtIndex:self.checkedItem.row];
+        return footer;
+    }
+    
     return [_currentSpecifier footerText];
 }
 
@@ -185,11 +210,14 @@
 	{
 		IASKTableViewFooterLabel *footerLabel = [[IASKTableViewFooterLabel alloc] initWithFrame:CGRectZero];
 		footerLabel.font = self.customFooterFont;
-		footerLabel.text = footerText;
-		
 		self.footerLabel = footerLabel;
 	}
-	
+    
+    if ([footerText isEqualToString:self.footerLabel.text] == NO) {
+        self.footerLabel.text = footerText;
+        [self.footerLabel sizeToFit];
+    }
+    
 	return self.footerLabel;
 }
 
@@ -255,8 +283,6 @@
 		[self updateCheckedItem];
 	}
 	
-	self.footerLabel = nil;
-	
 	// only reload the table if it had changed; prevents animation cancellation
 	if (![self.checkedItem isEqual:oldCheckedItem]) {
 		[_tableView reloadData];
@@ -264,11 +290,6 @@
 }
 
 #pragma mark - Header Footer
-
-- (void)clearHeaderFooterCache
-{
-	self.footerLabel = nil;
-}
 
 - (void)setCustomTitleValueCellTitleFont:(UIFont *)customTitleValueCellTitleFont
 {
@@ -288,21 +309,17 @@
 	}
 }
 
-- (void)setCustomHeaderFont:(UIFont *)customHeaderFont
-{
-	if (_customHeaderFont != customHeaderFont)
-	{
-		_customHeaderFont = customHeaderFont;
-		[self clearHeaderFooterCache];
-	}
-}
-
 - (void)setCustomFooterFont:(UIFont *)customFooterFont
 {
 	if (_customFooterFont != customFooterFont)
 	{
 		_customFooterFont = customFooterFont;
-		[self clearHeaderFooterCache];
+        
+        // Clear existing footer
+        if (self.footerLabel) {
+            self.footerLabel = nil;
+            [self.tableView reloadData];
+        }
 	}
 }
 
