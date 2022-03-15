@@ -173,7 +173,7 @@
         multipleFooters.count == [_currentSpecifier multipleValuesCount] &&
         multipleFooters.count > self.checkedItem.row) {
         NSString *footer = [multipleFooters objectAtIndex:self.checkedItem.row];
-        return footer;
+        return [self.settingsReader titleForStringId:footer];
     }
     
     return [_currentSpecifier footerText];
