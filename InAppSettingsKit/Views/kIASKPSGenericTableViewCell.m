@@ -106,6 +106,7 @@
 {
 	self.textLabel.font = self.textLabelFont;
 	self.detailTextLabel.font = self.valueLabelFont;
+    [super prepareForReuse];
 }
 
 @end
