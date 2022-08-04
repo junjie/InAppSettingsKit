@@ -20,36 +20,4 @@
 
 @implementation IASKPSTitleValueSpecifierViewCell
 
-- (void)layoutSubviews {
-	[super layoutSubviews];
-	
-	CGSize viewSize =  [self.textLabel superview].frame.size;
-
-	// if there's an image, make room for it
-	CGFloat imageOffset = floorf(self.imageView.image ? self.imageView.bounds.size.width + self.imageView.frame.origin.x : 0);
-	
-	CGFloat leftInset = self.separatorInset.left;
-	
-	// set the left title label frame
-	CGFloat labelWidth = [self.textLabel sizeThatFits:CGSizeZero].width;
-	CGFloat minValueWidth = (self.detailTextLabel.text.length) ? kIASKMinValueWidth + kIASKSpacing : 0;
-	labelWidth = MIN(labelWidth, viewSize.width - minValueWidth - leftInset -kIASKPaddingRight - imageOffset);
-	CGRect labelFrame = CGRectMake(leftInset + imageOffset, 0, labelWidth, viewSize.height);
-	if (!self.detailTextLabel.text.length) {
-		labelFrame = CGRectMake(leftInset + imageOffset, 0, viewSize.width - leftInset - kIASKPaddingRight - imageOffset, viewSize.height);
-	}
-	self.textLabel.frame = labelFrame;
-	
-	// set the right value label frame
-	if (!self.textLabel.text.length) {
-		viewSize =  [self.detailTextLabel superview].frame.size;
-		self.detailTextLabel.frame = CGRectMake(leftInset + imageOffset, 0, viewSize.width - leftInset - kIASKPaddingRight - imageOffset, viewSize.height);
-	} else if (self.detailTextLabel.textAlignment == NSTextAlignmentLeft) {
-		CGRect valueFrame = self.detailTextLabel.frame;
-		valueFrame.origin.x = labelFrame.origin.x + MAX(kIASKMinLabelWidth - imageOffset, labelWidth) + kIASKSpacing;
-		valueFrame.size.width = self.detailTextLabel.superview.frame.size.width - valueFrame.origin.x - kIASKPaddingRight;
-		self.detailTextLabel.frame = valueFrame;
-	}
-}
-
 @end
