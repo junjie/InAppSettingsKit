@@ -78,6 +78,7 @@
 #define kIASKTextLabelAlignmentLeft           @"IASKUITextAlignmentLeft"
 #define kIASKTextLabelAlignmentCenter         @"IASKUITextAlignmentCenter"
 #define kIASKTextLabelAlignmentRight          @"IASKUITextAlignmentRight"
+#define kIASKTextLabelAlignmentNatural        @"IASKUITextAlignmentNatural"
 
 #define kIASKPSGroupSpecifier                 @"PSGroupSpecifier"
 #define kIASKPSToggleSwitchSpecifier          @"PSToggleSwitchSpecifier"

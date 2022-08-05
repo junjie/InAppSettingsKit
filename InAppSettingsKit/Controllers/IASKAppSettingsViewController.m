@@ -731,7 +731,7 @@ CGRect IASKCGRectSwap(CGRect rect);
 	} else if ([specifier.type isEqualToString:kIASKButtonSpecifier]) {
 		NSString *value = [self.settingsStore objectForKey:specifier.key];
 		cell.textLabel.text = [value isKindOfClass:[NSString class]] ? [self.settingsReader titleForStringId:value] : specifier.title;
-		cell.accessoryType = (specifier.textAlignment == NSTextAlignmentLeft) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+		cell.accessoryType = (specifier.textAlignment == NSTextAlignmentNatural || specifier.textAlignment == NSTextAlignmentLeft) ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 	} else {
 		cell.textLabel.text = specifier.title;
 	}

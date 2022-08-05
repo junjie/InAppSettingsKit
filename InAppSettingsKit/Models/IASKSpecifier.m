@@ -352,13 +352,15 @@
         return NSTextAlignmentCenter;
     } else if ([alignmentString isEqualToString:kIASKTextLabelAlignmentRight]) {
         return NSTextAlignmentRight;
+    } else if ([alignmentString isEqualToString:kIASKTextLabelAlignmentNatural]) {
+        return NSTextAlignmentNatural;
     }
     if ([self.type isEqualToString:kIASKButtonSpecifier] && !self.cellImage) {
 		return NSTextAlignmentCenter;
 	} else if ([self.type isEqualToString:kIASKPSMultiValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueSpecifier] || [self.type isEqualToString:kIASKPSTitleValueButtonSpecifier] || [self.type isEqualToString:kIASKOpenURLSpecifier] || [self.type isEqualToString:kIASKMailComposeSpecifier] || self.stringValueForChildPane) {
 		return NSTextAlignmentRight;
 	}
-	return NSTextAlignmentLeft;
+	return NSTextAlignmentNatural;
 }
 
 - (id)valueForKey:(NSString *)key {
