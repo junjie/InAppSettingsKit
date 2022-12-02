@@ -176,6 +176,15 @@
 - (NSString*)footerTextForSection:(NSInteger)section {
     if ([self _sectionHasHeading:section]) {
         NSDictionary *dict = [[[self dataSource] objectAtIndex:section] objectAtIndex:kIASKSectionHeaderIndex];
+        // Check for presence of footer with device model
+        id footerObject = [dict objectForKey:kIASKFooterTextWithDeviceModel];
+        if (footerObject) {
+            NSString *footerTextWithDeviceModelFormatString = [self titleForStringId:footerObject];
+            if (footerTextWithDeviceModelFormatString) {
+                return [NSString stringWithFormat:footerTextWithDeviceModelFormatString, [[UIDevice currentDevice] localizedModel]];
+            }
+        }
+        // Return normal footer if present
         return [self titleForStringId:[dict objectForKey:kIASKFooterText]];
     }
     return nil;

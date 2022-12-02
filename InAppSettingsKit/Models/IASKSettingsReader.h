@@ -23,6 +23,7 @@
 #define kIASKType                             @"Type"
 #define kIASKTitle                            @"Title"
 #define kIASKFooterText                       @"FooterText"
+#define kIASKFooterTextWithDeviceModel        @"FooterTextWithDeviceModel"
 #define kIASKKey                              @"Key"
 #define kIASKFile                             @"File"
 #define kIASKDefaultValue                     @"DefaultValue"

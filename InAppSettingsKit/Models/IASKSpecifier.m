@@ -73,7 +73,14 @@
     return [self localizedObjectForKey:kIASKTitle];
 }
 
+// Used inside a PSMultiValueSpecifier child controller
 - (NSString*)footerText {
+    // Return footer with device model name if present
+    NSString *footerTextWithDeviceModelFormatString = [self localizedObjectForKey:kIASKFooterTextWithDeviceModel];
+    if (footerTextWithDeviceModelFormatString.length) {
+        return [NSString stringWithFormat:footerTextWithDeviceModelFormatString, [[UIDevice currentDevice] localizedModel]];
+    }
+    // Return normal footer
     return [self localizedObjectForKey:kIASKFooterText];
 }
 
