@@ -194,10 +194,15 @@ CGRect IASKCGRectSwap(CGRect rect);
 													 name:NSUserDefaultsDidChangeNotification
 												   object:udSettingsStore.defaults];
 		
-		// Don't call this on viewWillAppear; this will interfere with
-		// our custom deselection animation on viewWillAppear:. In any case
-		// we do a reload each time we come back on the cell
-//		[self userDefaultsDidChange]; // force update in case of changes while we were hidden
+		// Only call this in viewWillAppear when there is NO selected index path. Else,
+        // this will interfere with our custom deselection animation for the existing
+        // selection cell in viewWillAppear:. This is meant to handle cases as in on iPad
+        // where a the settings view controller can disappear and re-appear in scenarios
+        // other than pushing a child view controller and coming back to it.
+        NSIndexPath *selectedIndexPath = [self.tableView indexPathForSelectedRow];
+        if (selectedIndexPath == nil) {
+            [self userDefaultsDidChange]; // force update in case of changes while we were hidden
+        }
 	}
 }
 
