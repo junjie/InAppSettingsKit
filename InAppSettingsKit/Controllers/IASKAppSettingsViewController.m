@@ -884,7 +884,7 @@ CGRect IASKCGRectSwap(CGRect rect);
     } else if ([[specifier type] isEqualToString:kIASKOpenURLSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
 		NSURL *URL = specifier.URLValue ?: [NSURL URLWithString:specifier.defaultStringValue];
-		[[UIApplication sharedApplication] openURL:URL];
+        [[UIApplication sharedApplication] openURL:URL options:@{} completionHandler:nil];
     } else if ([[specifier type] isEqualToString:kIASKButtonSpecifier] ||
 			   [[specifier type] isEqualToString:kIASKPSTitleValueButtonSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
