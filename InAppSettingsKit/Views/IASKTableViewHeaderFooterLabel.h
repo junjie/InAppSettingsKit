@@ -8,7 +8,7 @@
 
 #import "JJInsetLabel.h"
 
-static inline UIColor* IASKTableViewHeaderFooterLabelColor() { return [UIColor colorWithRed:109/255.0 green:109/255.0 blue:114/255.0 alpha:1]; }
+static inline UIColor* IASKTableViewHeaderFooterLabelColor(void) { return [UIColor colorWithRed:109/255.0 green:109/255.0 blue:114/255.0 alpha:1]; }
 
 @interface IASKTableViewHeaderLabel : JJInsetLabel
 
