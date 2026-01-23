@@ -888,7 +888,9 @@ CGRect IASKCGRectSwap(CGRect rect);
     } else if ([[specifier type] isEqualToString:kIASKButtonSpecifier] ||
 			   [[specifier type] isEqualToString:kIASKPSTitleValueButtonSpecifier]) {
         [tableView deselectRowAtIndexPath:indexPath animated:YES];
-        if ([self.delegate respondsToSelector:@selector(settingsViewController:buttonTappedForSpecifier:)]) {
+        if ([self.delegate respondsToSelector:@selector(settingsViewController:tableView:buttonTappedForSpecifier:atIndexPath:)]) {
+            [self.delegate settingsViewController:self tableView:tableView buttonTappedForSpecifier:specifier atIndexPath:indexPath];
+        } else if ([self.delegate respondsToSelector:@selector(settingsViewController:buttonTappedForSpecifier:)]) {
             [self.delegate settingsViewController:self buttonTappedForSpecifier:specifier];
         } else if ([self.delegate respondsToSelector:@selector(settingsViewController:buttonTappedForKey:)]) {
             // deprecated, provided for backward compatibility

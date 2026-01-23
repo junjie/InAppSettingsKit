@@ -56,7 +56,13 @@
 
 #pragma mark - respond to button taps
 - (void)settingsViewController:(IASKAppSettingsViewController*)sender buttonTappedForKey:(NSString*)key __attribute__((deprecated)); // use the method below with specifier instead
+// Button tap delegate methods are called in this order of priority:
+// 1. settingsViewController:tableView:buttonTappedForSpecifier:atIndexPath: (if implemented)
+// 2. settingsViewController:buttonTappedForSpecifier: (fallback if #1 not implemented)
+// 3. settingsViewController:buttonTappedForKey: (deprecated fallback)
+// Only one of these methods will be called per button tap.
 - (void)settingsViewController:(IASKAppSettingsViewController*)sender buttonTappedForSpecifier:(IASKSpecifier*)specifier;
+- (void)settingsViewController:(IASKAppSettingsViewController*)sender tableView:(UITableView *)tableView buttonTappedForSpecifier:(IASKSpecifier*)specifier atIndexPath:(NSIndexPath *)indexPath;
 - (void)settingsViewController:(IASKAppSettingsViewController*)sender tableView:(UITableView *)tableView didSelectCustomViewSpecifier:(IASKSpecifier*)specifier;
 @end
 
